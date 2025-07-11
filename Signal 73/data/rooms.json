@@ -1,0 +1,136 @@
+{
+  "cryo_chamber": {
+    "name": "Cryo Chamber",
+    "description": "Frost clings to the walls. Your cryo-pod is open. A single light flickers above.",
+    "items": ["keycard"],
+    "exits": ["hallway"],
+    "puzzles": ["cryo_unlock"]
+  },
+  "hallway": {
+    "name": "Main Hallway",
+    "description": "Dim emergency lights guide your way. The silence is loud.",
+    "items": [],
+    "exits": ["cryo_chamber", "lab", "bridge", "medbay", "armory"]
+  },
+  "lab": {
+    "name": "Research Lab",
+    "description": "Broken vials and smashed terminals. Something went wrong here.",
+    "items": ["decoder_module", "log_alpha"],
+    "exits": ["hallway", "storage_bay"],
+    "puzzles": ["lab_reactor_reset"]
+  },
+  "bridge": {
+    "name": "Bridge",
+    "description": "The control center. Most systems are offline. A locked terminal blinks faintly.",
+    "items": ["log_beta"],
+    "exits": ["hallway"],
+    "locked": true,
+    "puzzles": ["bridge_passcode", "ai_terminal_challenge"]
+  },
+  "armory": {
+    "name": "Armory",
+    "description": "Racks of missing weapons. A security console glows red.",
+    "items": ["plasma_core"],
+    "exits": ["hallway"],
+    "locked": true
+  },
+  "medbay": {
+    "name": "MedBay",
+    "description": "Dark and blood-stained. Medical robots lie motionless.",
+    "items": ["stim_pack", "log_gamma"],
+    "exits": ["hallway", "bio_lab"]
+  },
+  "bio_lab": {
+    "name": "Bio Lab",
+    "description": "Plant samples have overgrown their containers. The air feels humid.",
+    "items": ["bio_key"],
+    "exits": ["medbay", "containment"]
+  },
+  "containment": {
+    "name": "Containment Zone",
+    "description": "Thick blast doors guard whatever lies beyond. A warning screen blinks 'QUARANTINE'.",
+    "items": [],
+    "exits": ["bio_lab"],
+    "locked": true
+  },
+  "storage_bay": {
+    "name": "Storage Bay",
+    "description": "Stacked crates and malfunctioning drones. Something scurries in the dark.",
+    "items": ["battery_pack"],
+    "exits": ["lab", "maintenance"],
+    "puzzles": ["storage_locks"]
+  },
+  "maintenance": {
+    "name": "Maintenance Access",
+    "description": "Pipes leak steam. Panels are torn open. This place is falling apart.",
+    "items": [],
+    "exits": ["storage_bay", "vent_shafts"]
+  },
+  "vent_shafts": {
+    "name": "Ventilation Shafts",
+    "description": "Narrow and claustrophobic. You can barely move. Strange sounds echo.",
+    "items": [],
+    "exits": ["maintenance", "escape_pod"]
+  },
+  "escape_pod": {
+    "name": "Escape Pod Bay",
+    "description": "All pods are gone... except one. The door is jammed.",
+    "items": ["log_delta"],
+    "exits": ["vent_shafts"],
+    "locked": true
+  },
+  "observation_deck": {
+    "name": "Observation Deck",
+    "description": "A vast window shows stars swirling in silence. You feel watched.",
+    "items": ["log_orion"],
+    "exits": ["bridge"],
+    "puzzles": ["alien_runes"]
+  },
+  "server_room": {
+    "name": "Server Room",
+    "description": "A hum of dying circuits. Data cores flicker in and out.",
+    "items": ["log_epsilon", "data_chip"],
+    "exits": ["lab"],
+    "puzzles": ["omega_decryption"]
+  },
+  "engineering_bay": {
+    "name": "Engineering Bay",
+    "description": "Sparks fly from damaged engines. It's too hot to stay long.",
+    "items": ["coolant_cell", "signal_omega"],
+    "exits": ["storage_bay"]
+  },
+  "crew_quarters": {
+    "name": "Crew Quarters",
+    "description": "Bunks are unmade. Personal items still linger. Everyone left in a hurry.",
+    "items": ["log_zeta"],
+    "exits": ["hallway"]
+  },
+  "command_room": {
+    "name": "Command Room",
+    "description": "A central table displays a static-filled hologram of the system.",
+    "items": ["command_chip"],
+    "exits": ["bridge", "observation_deck"],
+    "locked": true,
+    "puzzles": ["final_sequence"]
+  },
+  "janitor_closet": {
+    "name": "Janitor's Closet",
+    "description": "Dusty and cramped. Strange scribbles cover the walls.",
+    "items": ["cleaning_key", "log_xi"],
+    "exits": ["hallway"],
+    "puzzles": ["garden_growth_override"]
+  },
+  "cargo_hold": {
+    "name": "Cargo Hold",
+    "description": "Endless crates and tangled nets. One crate is broken open.",
+    "items": ["broken_drone"],
+    "exits": ["storage_bay", "airlock"]
+  },
+  "airlock": {
+    "name": "Airlock",
+    "description": "Exterior suit rack is empty. Warning lights flash intermittently.",
+    "items": [],
+    "exits": ["cargo_hold"],
+    "locked": true
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "ending_paths": {
+    "title": "Decision Point",
+    "content": "The system is nearing critical instability.\n\nThree options remain:\n\n- Upload to the SIGNAL (join signal)\n- Reboot the entire system (reboot system)\n- Shut it down permanently (shutdown core)\n\nOnly one path can be taken.\nEnsure you have the required tools and access before initiating."
+  },
+  "log_alpha": {
+    "title": "Research Lead's Journal",
+    "content": "Day 23: Subjects in Bio Lab showing unexpected aggression. Containment protocols reinforced. Requesting extra sedatives from MedBay."
+  },
+  "log_beta": {
+    "title": "Bridge Officer's Report",
+    "content": "We received Signal 73 again. Still no match in the galactic registry. Recommend initiating silent lockdown — just in case."
+  },
+  "log_gamma": {
+    "title": "Medical Log",
+    "content": "Patient #044's cryo-pod malfunctioned during stasis. Memory loss is certain. Recovered logs indicate exposure to Signal 73 frequencies."
+  },
+  "log_delta": {
+    "title": "Escape Pod Entry",
+    "content": "Only one pod remains functional. But I fear leaving now would doom the others. I’ll stay. One must know the truth."
+  },
+  "log_epsilon": {
+    "title": "Server Diagnostics",
+    "content": "System corruption spreading from unknown source. AI functions terminated. Backups encrypted with Omega Cipher."
+  },
+  "log_zeta": {
+    "title": "Crew Communication",
+    "content": "They heard voices in the observation deck. Not human, not electronic. Someone opened the quarantine gate... from inside."
+  },
+  "log_xi": {
+    "title": "Janitor's Note",
+    "content": "They called me crazy. I saw the vines move. They’re not just plants anymore. I locked the storage from the vent shaft side. Safer that way."
+  },
+  "log_orion": {
+    "title": "Captain’s Final Entry",
+    "content": "This ship was never meant to return. Signal 73 is a beacon — not a message. We brought something with us when we answered it."
+  },
+  "log_sigma": {
+    "title": "Internal Memo: Restricted",
+    "content": "Subject 7 breached its pod. Recommend full memory wipe and reboot of all biological units. Seal cryo section permanently."
+  },
+  "log_theta": {
+    "title": "Bridge Fragment",
+    "content": "ERROR: Transmission lost. Power diverted to unknown subsystem. Coordinates uploaded: X-173, Y-004, Z-09... End of file."
+  }
+}

@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Signal 73 - Terminal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #000;
+      color: #0f0;
+      font-family: monospace;
+      margin: 0;
+      padding: 10px;
+      font-size: 1rem;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    #terminal {
+      flex-grow: 1;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      scrollbar-width: none;
+    }
+
+    #terminal::-webkit-scrollbar {
+      display: none;
+    }
+
+    #input-line {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding-top: 6px;
+    }
+
+    #command-input {
+      flex-grow: 1;
+      background: transparent;
+      border: none;
+      color: #0f0;
+      font: inherit;
+      font-size: 1rem;
+      outline: none;
+    }
+
+    #intro-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.95);
+      color: #0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      padding: 20px;
+    }
+
+    .modal-content {
+      max-width: 800px;
+      width: 100%;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .modal-scroll {
+      overflow-y: auto;
+      max-height: 70vh;
+      margin-bottom: 20px;
+      padding-right: 10px;
+      text-align: left;
+      line-height: 1.6;
+      width: 100%;
+      scrollbar-width: none;
+    }
+
+    .modal-scroll::-webkit-scrollbar {
+      display: none;
+    }
+
+    #intro-modal h2 {
+      font-size: 2em;
+      margin-bottom: 15px;
+    }
+
+    #start-button {
+      background: #0f0;
+      color: #000;
+      padding: 10px 20px;
+      font-family: monospace;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      border-radius: 4px;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.95rem;
+        padding: 8px;
+      }
+
+      #start-button {
+        width: 100%;
+      }
+
+      #intro-modal h2 {
+        font-size: 1.6em;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="intro-modal">
+    <div class="modal-content">
+      <h2>SIGNAL 73</h2>
+      <div class="modal-scroll">
+        <p>
+          <b>Welcome to SIGNAL 73</b><br><br>
+          Developed with ❤ by<b> Elvish Patel</b><br>
+    <b>Inspired by ' A Dark Room '</b><br><br>
+          This is a <b>text-based terminal exploration game</b> set aboard an abandoned spacecraft.<br><br>
+          You wake up with no memory. The ship is silent, the crew is gone, and a terminal flickers before you.
+          Through typing commands, you will navigate unknown rooms, recover tools, read forgotten logs,
+          and uncover what happened — and who (or what) you are.<br><br>
+
+          🔎 <b>How to Play</b><br>
+          You interact by typing commands into the terminal.<br>
+          The world unfolds as you explore, discover items, unlock new modules, and decode mysterious signals.<br><br>
+
+          🛠️ <b>Gameplay Style:</b> Slow-paced, immersive, story-driven. There’s no score. Just you and the
+          system.<br><br>
+
+          🟢 <b>Example Commands:</b><br>
+          <code>help</code> — show all available commands<br>
+          <code>scan</code> — examine your current location<br>
+          <code>pickup item</code> — collect an item<br>
+          <code>move room_name</code> — navigate to another module/room<br>
+          <code>read log_id</code> — access a data log<br>
+          <code>decode signal_id</code> — decrypt mysterious transmissions<br>
+          <code>save</code> / <code>load</code> — store and continue progress<br><br>
+
+          💡 <b>Tip:</b> Type carefully. Pay attention to names, hints, and logs. Every message might matter.<br><br>
+
+          Ready to discover what’s left behind?
+        </p>
+      </div>
+      <button id="start-button">Start Game</button>
+    </div>
+  </div>
+  <div id="terminal"></div>
+
+  <script>
+    const terminal = document.getElementById("terminal");
+    const introModal = document.getElementById("intro-modal");
+    const startButton = document.getElementById("start-button");
+
+    let gameState = {
+      currentRoom: "cryo_chamber",
+      inventory: [],
+      logsRead: [],
+      unlockedRooms: ["cryo_chamber"],
+      discovered: [],
+    };
+
+    let rooms = {}, items = {}, logs = {}, puzzles = {}, signals = {};
+
+    async function loadData() {
+      [rooms, items, logs, puzzles, signals] = await Promise.all([
+        fetch('data/rooms.json').then(res => res.json()),
+        fetch('data/items.json').then(res => res.json()),
+        fetch('data/logs.json').then(res => res.json()),
+        fetch('data/puzzles.json').then(res => res.json()),
+        fetch('data/signals.json').then(res => res.json())
+      ]);
+      introModal.style.display = "flex";
+    }
+
+    function startGame() {
+      introModal.style.display = "none";
+      terminal.innerHTML = `
+    <div id="terminal-header">🛰️ SIGNAL 73 - Terminal Interface</div>
+    <div>Don't forget to save game progress by 'save' and to load progress 'load' commands.</div>
+    <div>Type 'help' for a list of commands.</div>
+    <div id="command-output"></div>
+  `;
+      writeBlock(getRoomDescriptionLines()); // Show current room
+      renderInputLine();
+    }
+
+    function getRoomDescriptionLines() {
+      const room = rooms[gameState.currentRoom];
+      if (!room) return ["❌ Current room not found."];
+
+      const lines = [
+        `<br>📍 You are in <b>${room.name}</b>`,
+        room.description
+      ];
+
+      if (room.items.length) lines.push(`🧾 Items: ${room.items.join(", ")}`);
+      if (room.puzzles?.length) lines.push(`🧩 Puzzles: ${room.puzzles.join(", ")}`);
+      if (room.logs?.length) lines.push(`📄 Logs: ${room.logs.join(", ")}`);
+      if (room.signals?.length) lines.push(`📡 Signals: ${room.signals.join(", ")}`);
+      lines.push(`🚪 Exits: ${room.exits.join(", ")}`);
+
+      return lines;
+    }
+
+
+    function renderRoomIntro() {
+      const room = rooms[gameState.currentRoom];
+      const output = document.getElementById("command-output");
+      output.innerHTML = `
+    <br>📍 You are in <b>${room.name}</b><br>
+    ${room.description}<br>
+    ${room.items.length ? `🧾 Items: ${room.items.join(", ")}<br>` : ""}
+    ${room.puzzles?.length ? `🧩 Puzzles: ${room.puzzles.join(", ")}<br>` : ""}
+    ${room.logs?.length ? `📄 Logs: ${room.logs.join(", ")}<br>` : ""}
+    ${room.signals?.length ? `📡 Signals: ${room.signals.join(", ")}<br>` : ""}
+    🚪 Exits: ${room.exits.join(", ")}
+  `;
+    }
+
+    // Updated renderInputLine to NOT clear output on every new command input
+    function renderInputLine() {
+      const existing = document.getElementById("input-line");
+      if (existing) existing.remove();
+
+      const inputLine = document.createElement("div");
+      inputLine.id = "input-line";
+      inputLine.innerHTML = `&gt; <input type="text" id="command-input" autocomplete="off" />`;
+      terminal.appendChild(inputLine);
+
+      const cmdInput = inputLine.querySelector("#command-input");
+      cmdInput.focus();
+
+      cmdInput.addEventListener("keydown", e => {
+        if (e.key === "Enter") {
+          const input = cmdInput.value.trim();
+          if (input) {
+            write("> " + input);
+            handleCommand(input);
+            cmdInput.disabled = true;
+            renderInputLine();
+          }
+        }
+      });
+
+      terminal.scrollTop = terminal.scrollHeight;
+    }
+
+    function clearOutput() {
+      const output = document.getElementById("command-output");
+      if (output) output.innerHTML = "";
+    }
+
+    function writeBlock(lines, cls = "green") {
+      const output = document.getElementById("command-output");
+      if (!output) return;
+
+      // Write each line (as an array)
+      lines.forEach(text => {
+        const line = document.createElement("div");
+        line.innerHTML = text;
+        line.className = cls;
+        output.appendChild(line);
+      });
+
+      setTimeout(() => {
+        terminal.scrollTop = terminal.scrollHeight;
+        const inputLine = document.getElementById("input-line");
+        if (inputLine) inputLine.scrollIntoView({ behavior: "smooth", block: "end" });
+      }, 10);
+    }
+
+    function lookAround() {
+      const room = rooms[gameState.currentRoom];
+      const output = document.getElementById("command-output");
+      if (!room || !output) return;
+
+      output.innerHTML = `
+    <br>📍 You are in <b>${room.name}</b><br>
+    ${room.description}<br>
+    ${room.items.length ? `🧾 Items: ${room.items.join(", ")}<br>` : ""}
+    ${room.puzzles?.length ? `🧩 Puzzles: ${room.puzzles.join(", ")}<br>` : ""}
+    ${room.logs?.length ? `📄 Logs: ${room.logs.join(", ")}<br>` : ""}
+    ${room.signals?.length ? `📡 Signals: ${room.signals.join(", ")}<br>` : ""}
+    🚪 Exits: ${room.exits.join(", ")}
+  `;
+    }
+
+    function handleCommand(cmd) {
+      clearOutput(); // Clear previous output
+
+      const args = cmd.trim().split(" ");
+      const keyword = args[0].toLowerCase();
+      const rest = args.slice(1).join(" ");
+      let outputLines = [`> ${cmd}`]; // Show the command entered
+
+      switch (keyword) {
+        case 'help':
+          outputLines.push("🛠️ Available Commands:");
+          outputLines.push("- scan: look around");
+          outputLines.push("- move [room]");
+          outputLines.push("- pickup [item]");
+          outputLines.push("- inventory");
+          outputLines.push("- use [item] on [target]");
+          outputLines.push("- read [log]");
+          outputLines.push("- decode [signal]");
+          outputLines.push("- save / load");
+          outputLines.push("🔚 Hint: Some commands affect how your journey ends... (ending_paths)");
+          break;
+
+        case 'scan': {
+          const room = rooms[gameState.currentRoom];
+          if (!room) {
+            outputLines.push("❌ Current room not found.");
+            break;
+          }
+          outputLines.push(...getRoomDescriptionLines());
+          break;
+        }
+
+        case 'move': {
+          if (!rest) {
+            outputLines.push("❌ Move where?");
+            break;
+          }
+          if (!rooms[rest]) {
+            outputLines.push("❌ Invalid room.");
+            break;
+          }
+          if (!rooms[gameState.currentRoom].exits.includes(rest)) {
+            outputLines.push("❌ No direct path.");
+            break;
+          }
+          if (rooms[rest].locked && !gameState.unlockedRooms.includes(rest)) {
+            outputLines.push("🔒 Room is locked.");
+            break;
+          }
+          gameState.currentRoom = rest;
+          const room = rooms[rest];
+          outputLines.push(...getRoomDescriptionLines());
+          break;
+        }
+
+        case 'pickup': {
+          const item = rest;
+          const currentRoom = rooms[gameState.currentRoom];
+          if (!item) {
+            outputLines.push("❌ Pickup what?");
+          } else if (!currentRoom.items.includes(item)) {
+            outputLines.push("❌ Item not found here.");
+          } else if (!gameState.inventory.includes(item)) {
+            gameState.inventory.push(item);
+            currentRoom.items = currentRoom.items.filter(i => i !== item);
+            outputLines.push(`✅ Picked up ${item}`);
+          } else {
+            outputLines.push("⚠️ Already in inventory.");
+          }
+          break;
+        }
+
+        case 'inventory':
+          outputLines.push("🎒 Inventory:");
+          outputLines.push(gameState.inventory.length ? gameState.inventory.join(", ") : "empty.");
+          break;
+
+        case 'use': {
+          const onIndex = args.indexOf("on");
+          if (onIndex === -1) {
+            outputLines.push("❌ Use [item] on [target]");
+            break;
+          }
+          const useItem = args.slice(1, onIndex).join(" ");
+          const target = args.slice(onIndex + 1).join(" ");
+          if (!gameState.inventory.includes(useItem)) {
+            outputLines.push("❌ You don't have that item.");
+            break;
+          }
+
+          const usableTargets = items[useItem]?.usableOn || [];
+          if (usableTargets.includes(target)) {
+            if (rooms[target] && !gameState.unlockedRooms.includes(target)) {
+              gameState.unlockedRooms.push(target);
+              outputLines.push(`🔓 ${target} unlocked.`);
+            } else {
+              outputLines.push(`✅ Used ${useItem} on ${target}`);
+            }
+          } else {
+            outputLines.push(`❌ Can't use ${useItem} on ${target}.`);
+          }
+          break;
+        }
+
+        case 'read':
+          if (!logs[rest]) {
+            outputLines.push("❌ Log not found.");
+          } else {
+            if (!gameState.logsRead.includes(rest)) gameState.logsRead.push(rest);
+            outputLines.push(`📄 <b>${logs[rest].title}</b>: ${logs[rest].content}`);
+          }
+          break;
+
+        case 'decode':
+          if (!signals[rest]) {
+            outputLines.push("❌ Signal not found.");
+          } else if (!gameState.inventory.includes("signal_decoder_tool")) {
+            outputLines.push("❌ Decoder required.");
+          } else {
+            outputLines.push(`📡 <b>${signals[rest].name}</b>: ${signals[rest].content}`);
+          }
+          break;
+
+        case 'save':
+          localStorage.setItem("signal73_save", JSON.stringify(gameState));
+          outputLines.push("💾 Game saved.");
+          break;
+
+        case 'load':
+          const saved = localStorage.getItem("signal73_save");
+          if (saved) {
+            gameState = JSON.parse(saved);
+            outputLines.push("🔁 Game loaded.");
+          } else {
+            outputLines.push("❌ No saved game found.");
+          }
+          break;
+
+        case 'reboot':
+        case 'reboot system':
+          if (gameState.logsRead.includes("core_log") && gameState.inventory.includes("system_override_chip")) {
+            outputLines.push("⚠️ Reboot protocol initiated...");
+            writeBlock(outputLines);
+            setTimeout(() => writeBlock(["🧠 System memory wiped."]), 1000);
+            setTimeout(() => writeBlock(["🔁 Cycle reset for next explorer."]), 2000);
+            setTimeout(() => writeBlock(["🕯️ The lights flicker. Protocol overwritten. You are… forgotten."]), 3000);
+            return;
+          } else {
+            outputLines.push("🔒 Reboot requires 'system_override_chip' and reading 'core_log'.");
+          }
+          break;
+
+        case 'join':
+        case 'join signal':
+          if (gameState.logsRead.includes("signal_origin") && gameState.inventory.includes("signal_decoder_tool")) {
+            outputLines.push("📡 Uploading consciousness...");
+            writeBlock(outputLines);
+            setTimeout(() => writeBlock(["🌐 Minds converge. Echoes merge."]), 1000);
+            setTimeout(() => writeBlock(["🧠 You are the signal now."]), 2000);
+            return;
+          } else {
+            outputLines.push("🔒 You must decode 'signal_origin' and have the decoder tool.");
+          }
+          break;
+
+        case 'solve':
+          if (!rest) {
+            outputLines.push("❌ Solve what?");
+            break;
+          }
+          const roomPuzzles = rooms[gameState.currentRoom]?.puzzles || [];
+          if (!roomPuzzles.includes(rest)) {
+            outputLines.push("❌ Puzzle not found here.");
+            break;
+          }
+          const puzzle = puzzles[rest];
+          if (!puzzle) {
+            outputLines.push("❌ Puzzle data missing.");
+            break;
+          }
+          if (puzzle.solved) {
+            outputLines.push("✅ Already solved.");
+            break;
+          }
+          if (puzzle.requiresItem && !gameState.inventory.includes(puzzle.requiresItem)) {
+            outputLines.push(`🔒 You need ${puzzle.requiresItem} to solve this puzzle.`);
+            break;
+          }
+          puzzle.solved = true;
+          outputLines.push(`🧠 Solved ${rest}: ${puzzle.description || "Well done!"}`);
+          if (puzzle.unlocksRoom && !gameState.unlockedRooms.includes(puzzle.unlocksRoom)) {
+            gameState.unlockedRooms.push(puzzle.unlocksRoom);
+            outputLines.push(`🔓 Room unlocked: ${puzzle.unlocksRoom}`);
+          }
+          break;
+
+        case 'shutdown':
+        case 'shutdown core':
+          if (gameState.logsRead.includes("final_warning") && gameState.inventory.includes("shutdown_key")) {
+            outputLines.push("⚠️ Shutting down core systems...");
+            writeBlock(outputLines);
+            setTimeout(() => writeBlock(["💤 The hum fades. Lights dim."]), 1000);
+            setTimeout(() => writeBlock(["🌑 Silence. A breath held forever."]), 2000);
+            setTimeout(() => writeBlock(["🕊️ No beacons. No answers. Just peace."]), 3000);
+            return;
+          } else {
+            outputLines.push("🔒 You need 'shutdown_key' and must read 'final_warning' log.");
+          }
+          break;
+
+        default:
+          outputLines.push("❓ Unknown command. Type 'help' for help.");
+      }
+
+      writeBlock(outputLines);
+    }
+
+    function write(text, cls = "green") {
+      writeBlock([text], cls);
+    }
+
+    startButton.addEventListener("click", () => {
+      startGame();
+      setTimeout(() => {
+        const cmdInput = document.getElementById("command-input");
+        if (cmdInput) cmdInput.focus();
+      }, 100);
+    });
+    loadData();
+  </script>
+</body>
+
+</html>

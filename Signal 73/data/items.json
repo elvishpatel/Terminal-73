@@ -1,0 +1,82 @@
+{
+  "keycard": {
+    "name": "Cryo Keycard",
+    "usableOn": ["bridge", "armory"]
+  },
+  "decoder_module": {
+    "name": "Signal Decoder Module",
+    "usableOn": ["signal_alpha", "signal_omega"]
+  },
+  "plasma_core": {
+    "name": "Plasma Core",
+    "usableOn": ["engineering_bay", "coolant_cell"]
+  },
+  "stim_pack": {
+    "name": "Stimulant Pack",
+    "usableOn": []
+  },
+  "bio_key": {
+    "name": "Bio Lab Clearance",
+    "usableOn": ["containment"]
+  },
+  "battery_pack": {
+    "name": "Battery Pack",
+    "usableOn": ["broken_drone", "airlock"]
+  },
+  "coolant_cell": {
+    "name": "Coolant Cell",
+    "usableOn": ["engineering_bay"]
+  },
+  "command_chip": {
+    "name": "Command Chip",
+    "usableOn": ["command_room"]
+  },
+  "data_chip": {
+    "name": "Encrypted Data Chip",
+    "usableOn": ["server_room"]
+  },
+  "cleaning_key": {
+    "name": "Janitor's Key",
+    "usableOn": ["vent_shafts", "medbay"]
+  },
+  "broken_drone": {
+    "name": "Inactive Recon Drone",
+    "usableOn": []
+  },
+  "log_alpha": {
+    "name": "Log Alpha",
+    "usableOn": []
+  },
+  "log_beta": {
+    "name": "Log Beta",
+    "usableOn": []
+  },
+  "log_gamma": {
+    "name": "Log Gamma",
+    "usableOn": []
+  },
+  "log_delta": {
+    "name": "Log Delta",
+    "usableOn": []
+  },
+  "log_epsilon": {
+    "name": "Log Epsilon",
+    "usableOn": []
+  },
+  "log_zeta": {
+    "name": "Log Zeta",
+    "usableOn": []
+  },
+  "log_xi": {
+    "name": "Log Xi",
+    "usableOn": []
+  },
+  "log_orion": {
+    "name": "Log Orion",
+    "usableOn": []
+  },
+  "signal_decoder_tool": {
+    "name": "Signal Decoder Tool",
+    "usableOn": ["signal_alpha", "signal_omega"]
+  }
+}

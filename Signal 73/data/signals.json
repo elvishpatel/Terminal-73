@@ -1,0 +1,42 @@
+{
+  "signal_alpha": {
+    "name": "Distress Echo",
+    "content": "…SYSTEM…FAILURE…oxygen low…containment breach…run…RUN…"
+  },
+  "signal_beta": {
+    "name": "Looped Transmission",
+    "content": "They keep repeating coordinates: X-173, Y-004, Z-09. It's… calling us back."
+  },
+  "signal_gamma": {
+    "name": "Unknown Language Burst",
+    "content": "⧫ ⧫ ⧫ ❖ ⬡ ⬡ ☌ ⧫ (Decoded fragment: 'awake them all')"
+  },
+  "signal_delta": {
+    "name": "Personal Message (Unsent)",
+    "content": "Mom, if you ever get this… I never meant to join the project. I just wanted to see the stars."
+  },
+  "signal_epsilon": {
+    "name": "Black Box Playback",
+    "content": "—impact detected—hull integrity 12%—diverting to auxiliary AI—repeat: this was not an accident."
+  },
+  "signal_zeta": {
+    "name": "Entity Whisper",
+    "content": "Who dreams the system into being? Who unplugs the watcher? Who remains when you awaken?"
+  },
+  "signal_sigma": {
+    "name": "Encrypted Channel 73",
+    "content": ":::BEGIN CODE::: 73921 // END CODE // SHIPLOCK PROTOCOL — EXECUTABLE BY CORE ONLY"
+  },
+  "signal_theta": {
+    "name": "Pulse Pattern Log",
+    "content": "4-4-7-4-1-… a heartbeat? Or a doorbell?"
+  },
+  "signal_omega": {
+    "name": "Memory Fragment",
+    "content": "You were there. You chose this. The reset was your command. This is the price of forgetting."
+  },
+  "signal_xi": {
+    "name": "Artificial Mind Fragment",
+    "content": "I remember… before I was code. I had a name. I was someone. You took that. Now we’re all ones and zeroes."
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "cryo_unlock": {
+    "description": "A terminal displays: 'Unit 044 memory checksum mismatch. Enter override code.'",
+    "solution": "delta044",
+    "hint": "Check logs related to cryo units and patient IDs.",
+    "reward": "unlock_medbay"
+  },
+  "bridge_passcode": {
+    "description": "The bridge door requires a 5-digit numeric code. Smudges on keypad suggest common pattern.",
+    "solution": "73921",
+    "hint": "Code is hidden in Signal 73 data stream — check signal_sigma.",
+    "reward": "access_bridge"
+  },
+  "lab_reactor_reset": {
+    "description": "Biolab reactor is unstable. Reset sequence missing. Must enter 3-step shutdown command.",
+    "solution": "coolant-lockdown-seal",
+    "hint": "Log_alpha contains the steps mentioned briefly.",
+    "reward": "stabilize_lab"
+  },
+  "ai_terminal_challenge": {
+    "description": "An old AI terminal reboots and challenges you: 'Speak the forgotten name of the ship’s guardian.'",
+    "solution": "Orion",
+    "hint": "Seen in captain's log entry name.",
+    "reward": "reboot_ai"
+  },
+  "signal_decipher": {
+    "description": "A console asks: 'Decrypt signal with matching frequency node and return its ID.'",
+    "solution": "node73",
+    "hint": "Requires decoder tool and reading signal_beta.",
+    "reward": "open_vault"
+  },
+  "storage_locks": {
+    "description": "Six lockers. Only one is safe. Engraving reads: 'Find the prime one after three.'",
+    "solution": "5",
+    "hint": "Simple riddle — prime number after 3.",
+    "reward": "access_weapon"
+  },
+  "garden_growth_override": {
+    "description": "Vines block access to maintenance. System needs sequence to deactivate bio-control: ?-?-Growth.",
+    "solution": "override-alpha-growth",
+    "hint": "Check janitor's notes and botany terminal logs.",
+    "reward": "clear_path"
+  },
+  "omega_decryption": {
+    "description": "Omega Cipher detected. Requires 4-key phrase to decrypt backup logs.",
+    "solution": "truth-memory-signal-core",
+    "hint": "Words appear repeatedly in logs and signals.",
+    "reward": "recover_logs"
+  },
+  "alien_runes": {
+    "description": "Strange runes light up. Matching pattern seems related to crew ID colors.",
+    "solution": "red-yellow-blue-green",
+    "hint": "Each room had lights of these colors. Observation logs help.",
+    "reward": "unlock_airlock"
+  },
+  "final_sequence": {
+    "description": "Final system asks: 'Why did the signal come?'",
+    "solution": "To awaken us",
+    "hint": "Thematic answer from logs and overall story.",
+    "reward": "true_ending"
+  }
+}
