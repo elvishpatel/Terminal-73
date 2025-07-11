@@ -8,7 +8,7 @@ A **text-based, immersive sci-fi terminal game** set aboard a mysterious abandon
 ![screenshot](https://github.com/user-attachments/assets/bbd0a768-3194-468f-88ad-39f2764c01e1)
 
 
-## Live Preview : (signal-73-by-elvish.netlify.app)
+## Live Preview : (https://signal-73-by-elvish.netlify.app)
 ---
 
 ## 🚀 Overview
