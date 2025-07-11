@@ -2,6 +2,9 @@
 
 A **text-based, immersive sci-fi terminal game** set aboard a mysterious abandoned spacecraft. 
 
+---
+## Screenshot
+
 ![screenshot](https://github.com/user-attachments/assets/bbd0a768-3194-468f-88ad-39f2764c01e1)
 
 
