@@ -1,9 +1,8 @@
 # 🛰️ SIGNAL 73 - Terminal Exploration Game
 
-A **text-based, immersive sci-fi terminal game** set aboard a mysterious abandoned spacecraft.  
-Built with ❤️ by **Elvish Patel** — inspired by the atmospheric minimalism of *A Dark Room*.
+A **text-based, immersive sci-fi terminal game** set aboard a mysterious abandoned spacecraft. 
 
-![screenshot]![7](https://github.com/user-attachments/assets/bbd0a768-3194-468f-88ad-39f2764c01e1)
+Screenshot : (https://github.com/user-attachments/assets/bbd0a768-3194-468f-88ad-39f2764c01e1)
 
 
 ## Live Preview : (signal-73-by-elvish.netlify.app)
